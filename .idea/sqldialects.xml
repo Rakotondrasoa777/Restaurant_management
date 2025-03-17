@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/db/migration/1_create_table_dish.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/migration/6_create_table_order.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/migration/7_create_table_dish_order.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/migration/8_create_table_order_status.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/migration/9_create_table_dish_order_status.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/1_insert _data_dish_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/2_insert_data_ingredient_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/3_insert_data_dish_ingredient_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/4_insert_data_history_price_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/5_insert_data_stock_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/6_insert_data_order_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/7_insert_data_dish_order_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/8_insert_data_order_status_test.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/db/testdata/9_insert_data_dish_order_status_test.sql" dialect="PostgreSQL" />
+  </component>
+</project>
