@@ -38,8 +38,7 @@ public class Order {
 
     public OrderStatus getActualStatus() {
         return statusOrder.stream()
-                .max(Comparator.comparing(OrderStatus::getDateOrderStatus))
-                .get();
+                .max(Comparator.comparing(OrderStatus::getDateOrderStatus)).get();
     }
 
     public List<DishOrder> getDishOrders() {
@@ -63,8 +62,25 @@ public class Order {
             }
         }
 
-        orderDao.changeStatusOrder(listDishOrder, id_dish_order);
+        orderDao.changeStatusOrder(listDishOrder, getUniqueReference());
 
+    }
+
+    public void confirmOrder() {
+        OrderDao orderDao = new OrderDao();
+        int numberDishConfirm = 0;
+        for (DishOrder dishOrder : listDishOrder) {
+            if (dishOrder.getDish().getAvailableDish() >= dishOrder.getQuantityOfDish()) {
+                numberDishConfirm++;
+            } else {
+                throw new IllegalArgumentException("We have just : "+dishOrder.getDish().getAvailableDish()+" dish");
+            }
+            dishOrder.changeStatus(dishOrder.getIdDishOrder());
+        }
+
+        if (numberDishConfirm == listDishOrder.size()) {
+            orderDao.changeStatusOrder(listDishOrder, getUniqueReference());
+        }
     }
 
     @Override

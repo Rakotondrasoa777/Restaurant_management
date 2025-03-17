@@ -62,9 +62,9 @@ public class DishOrder {
     public String toString() {
         return "DishOrder{" +
                 "idDishOrder=" + idDishOrder +
-                ", dish=" + dish +
+                ", dish=" + dish.getName() +
                 ", quantityOfDish=" + quantityOfDish +
-                ", statusDishOrder=" + statusDishOrder +
+                ", statusDishOrder=" + statusDishOrder.stream().toList() +
                 '}';
     }
 

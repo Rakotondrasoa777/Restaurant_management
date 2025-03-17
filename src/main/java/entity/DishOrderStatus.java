@@ -28,7 +28,7 @@ public class DishOrderStatus {
 
     @Override
     public String toString() {
-        return "DishOrderStatus{" +
+        return "{" +
                 "dishOrderStatus=" + dishOrderStatus +
                 ", dateDishOrderStatus=" + dateDishOrderStatus +
                 '}';

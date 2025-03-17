@@ -98,7 +98,7 @@ public class DishOrderDao{
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, String.valueOf(status));
+            preparedStatement.setObject(1, status.name(), java.sql.Types.OTHER);
             preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setInt(3, id_dish_order);
 

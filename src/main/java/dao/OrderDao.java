@@ -31,15 +31,25 @@ public class OrderDao {
 
     public void changeStatusOrder(List<DishOrder> dishOrders, int referenceOrder) {
         boolean isCreated = dishOrders.stream()
-                .allMatch(dishOrder -> dishOrder.getStatusDishOrder().equals(Status.CREATED));
+                .allMatch(dishOrderStatus -> dishOrderStatus.getStatusDishOrder().stream().allMatch(
+                        status -> status.getDishOrderStatus().equals(Status.CREATED)
+                ));
         boolean isConfirmed = dishOrders.stream()
-                .allMatch(dishOrder -> dishOrder.getStatusDishOrder().equals(Status.CONFIRMED));
+                .allMatch(dishOrderStatus -> dishOrderStatus.getStatusDishOrder().stream().allMatch(
+                        status -> status.getDishOrderStatus().equals(Status.CONFIRMED)
+                ));
         boolean isInPreparation = dishOrders.stream()
-                .allMatch(dishOrder -> dishOrder.getStatusDishOrder().equals(Status.IN_PREPARATION));
+                .allMatch(dishOrderStatus -> dishOrderStatus.getStatusDishOrder().stream().allMatch(
+                        status -> status.getDishOrderStatus().equals(Status.IN_PREPARATION)
+                ));
         boolean isCompleted = dishOrders.stream()
-                .allMatch(dishOrder -> dishOrder.getStatusDishOrder().equals(Status.COMPLETED));
+                .allMatch(dishOrderStatus -> dishOrderStatus.getStatusDishOrder().stream().allMatch(
+                        status -> status.getDishOrderStatus().equals(Status.COMPLETED)
+                ));
         boolean isServed = dishOrders.stream()
-                .allMatch(dishOrder -> dishOrder.getStatusDishOrder().equals(Status.SERVED));
+                .allMatch(dishOrderStatus -> dishOrderStatus.getStatusDishOrder().stream().allMatch(
+                        status -> status.getDishOrderStatus().equals(Status.SERVED)
+                ));
 
         if (isCreated) {
             insert(Status.CONFIRMED, referenceOrder);
@@ -51,6 +61,22 @@ public class OrderDao {
             insert(Status.SERVED, referenceOrder);
         }  else if (isServed) {
             throw new IllegalArgumentException("All of dish in order is already served");
+        }
+    }
+
+    public void confirmDishOrderInOrder(int referenceOrder) {
+        String sql = "insert into dish_order_status values (?, ?, ?)";
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, String.valueOf(Status.CONFIRMED));
+            preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setInt(3, referenceOrder);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -71,7 +97,7 @@ public class OrderDao {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into order_status values (?,?,?)"
             )){
-            preparedStatement.setString(1, status.name());
+            preparedStatement.setObject(1, status.name(), Types.OTHER);
             preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setInt(3, referenceOrder);
 
