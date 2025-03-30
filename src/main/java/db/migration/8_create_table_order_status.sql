@@ -6,3 +6,4 @@ create table order_status(
     reference_order int,
     constraint fk_order foreign key (reference_order) references "order" (reference_order)
 );
+

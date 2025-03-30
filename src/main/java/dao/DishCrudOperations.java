@@ -55,6 +55,24 @@ public class DishCrudOperations implements CrudOperations<Dish>{
 
     }
 
+    public Dish findDishById(int idDish) {
+        String sql = "select d.id_dish, d.name, d.unit_price from dish d where d.id_dish=?";
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, idDish);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                Dish dishName = mapDishByNameFromResultset(resultSet);
+                return dishName;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     @Override
     public List<Dish> saveAll(List<Dish> listDish) {
         String upsert = "insert into dish (id_dish, name, unit_price) values (?, ?, ?)" +

@@ -37,7 +37,6 @@ public class IngredientCrudOperation {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     };
 
     public Ingredient getIngredientById(int id) {

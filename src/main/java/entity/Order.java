@@ -1,12 +1,9 @@
 package entity;
 
+import dao.DishOrderDao;
 import dao.OrderDao;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Order {
     private int uniqueReference;
@@ -51,36 +48,68 @@ public class Order {
                 .sum();
     }
 
-    public void changeStatusDishOrderInOrder(int id_dish_order) {
-        OrderDao orderDao = new OrderDao();
-
+    public DishOrderStatus getActualStatusOfDishOrderByIdInOrder(int dishOrderId) {
         for (DishOrder dishOrder : listDishOrder) {
-            if (dishOrder.getIdDishOrder() == id_dish_order) {
-                dishOrder.changeStatus(id_dish_order);
-            } else {
-                throw new IllegalArgumentException("L' ID : "+id_dish_order+ " est introuvable");
+            if (dishOrder.getIdDishOrder() == dishOrderId) {
+                return dishOrder.getActualStatus();
             }
         }
+        throw new IllegalArgumentException("ID introuvable");
+    }
 
-        orderDao.changeStatusOrder(listDishOrder, getUniqueReference());
+    public void addDishOrderInOrder(DishOrder dishOrder) {
 
+        OrderDao orderDao = new OrderDao();
+        if (getActualStatus().getOrderStatus() == Status.CREATED) {
+            orderDao.addDishOrderInOrderByIdDish(dishOrder);
+        } else {
+            throw new IllegalArgumentException("Order is already confirmed and can't be added");
+        }
+    }
+
+    public void updateDishOrderInOrder(int idDishOrder, int idDish, int quantityDish) {
+        DishOrderDao dishOrderDao = new DishOrderDao();
+        if (getActualStatus().getOrderStatus() == Status.CREATED) {
+            dishOrderDao.updateDishOrder(idDishOrder, idDish, quantityDish);
+        } else {
+            throw new IllegalArgumentException("Order is already passed");
+        }
+    }
+
+    public void deleteDishOrderInOrder(int idDishOrder) {
+        DishOrderDao dishOrderDao = new DishOrderDao();
+        if (getActualStatus().getOrderStatus() == Status.CREATED) {
+            dishOrderDao.deleteDishOrder(idDishOrder);
+        } else {
+            throw new IllegalArgumentException("Order is already passed");
+        }
+    }
+
+    public void changeStatusDishOrderInOrder(int id) {
+        DishOrderDao dishOrderDao = new DishOrderDao();
+        OrderDao orderDao = new OrderDao();
+        List<DishOrder> dishOrderList = dishOrderDao.getAllDishOrderByReferenceOrder(getUniqueReference());
+
+        Optional<DishOrder> dishOrder = dishOrderList.stream()
+                        .filter(d -> d.getIdDishOrder() == id)
+                        .findFirst();
+        if (dishOrder.isPresent()) {
+            dishOrderDao.updateDishOrderStatus(id, getUniqueReference());
+            orderDao.changeStatusOrder(dishOrderList, getUniqueReference());
+        }
     }
 
     public void confirmOrder() {
-        OrderDao orderDao = new OrderDao();
-        int numberDishConfirm = 0;
-        for (DishOrder dishOrder : listDishOrder) {
-            if (dishOrder.getDish().getAvailableDish() >= dishOrder.getQuantityOfDish()) {
-                numberDishConfirm++;
-            } else {
-                throw new IllegalArgumentException("We have just : "+dishOrder.getDish().getAvailableDish()+" dish");
-            }
-            dishOrder.changeStatus(dishOrder.getIdDishOrder());
+        if (getActualStatus().getOrderStatus() == Status.CONFIRMED) {
+            throw new IllegalArgumentException("Order is already confirmed");
         }
 
-        if (numberDishConfirm == listDishOrder.size()) {
-            orderDao.changeStatusOrder(listDishOrder, getUniqueReference());
+        DishOrderDao dishOrderDao = new DishOrderDao();
+        for (DishOrder dishOrder : listDishOrder) {
+            dishOrderDao.updateDishOrderStatus(dishOrder.getIdDishOrder(), getUniqueReference());
         }
+        OrderDao orderDao = new OrderDao();
+        orderDao.changeStatusOrder(listDishOrder, getUniqueReference());
     }
 
     @Override

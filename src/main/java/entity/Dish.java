@@ -124,16 +124,6 @@ public class Dish {
 
     }
 
-    public static void main(String[] args) {
-        IngredientCrudOperation operation = new IngredientCrudOperation();
-        Dish dish = new Dish();
-        dish.setId_dish(1);
-        dish.setName("Hot Dog");
-        dish.setUnitPrice(15000);
-        dish.setDishIngredientList(operation.getIngredientOfDishByID(dish.getId_dish()));
-
-        System.out.println(dish.getAvailableDish());
-    }
     @Override
     public String toString() {
         return "Dish{" +

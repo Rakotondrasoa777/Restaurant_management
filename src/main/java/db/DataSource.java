@@ -19,7 +19,6 @@ public class DataSource {
 
     public Connection getConnection() {
         try {
-            // permet d'obtenir une connection a la base si il ' n y a aucune erreur
             return DriverManager.getConnection(jdbcUrl, user, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);

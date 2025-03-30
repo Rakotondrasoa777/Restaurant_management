@@ -20,6 +20,6 @@ public class Main {
         order.setStatusOrder(orderDao.getAllOrderStatusInOrder(order.getUniqueReference()));
         order.setListDishOrder(dishOrderdao.getAllDishOrderByReferenceOrder(order.getUniqueReference()));
 
-        order.confirmOrder();
+        System.out.println(order.getActualStatus());
     }
 }
